@@ -62,12 +62,12 @@ private:
 	//-----------------------------------------------------------------------------
 	// Per-vertex data (extended)
 	//-----------------------------------------------------------------------------
-	typedef struct _vertexPositionColorTangent
+	typedef struct _vertexPositionColorTexture
 	{
 		DirectX::XMFLOAT3 pos;
 		DirectX::XMFLOAT3 normal;
-		DirectX::XMFLOAT3 tangent;
-	} VertexPositionColorTangent;
+		DirectX::XMFLOAT2 texture;
+	} VertexPositionColorTexture;
 
 	ConstantBufferStruct m_constantBufferData;
 	unsigned int  m_indexCount;

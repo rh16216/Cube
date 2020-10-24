@@ -73,6 +73,9 @@ HRESULT Renderer::CreateShaders()
 
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT,
 		0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,
+		0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
 	hr = device->CreateInputLayout(
@@ -198,17 +201,17 @@ HRESULT Renderer::CreateCube()
 	ID3D11Device* device = m_deviceResources->GetDevice();
 
 	// Create cube geometry.
-	VertexPositionColor CubeVertices[] =
+	VertexPositionColorTexture CubeVertices[] =
 	{
-		{DirectX::XMFLOAT3(-0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(0,   0,   0),},
-		{DirectX::XMFLOAT3(-0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(0,   0,   1),},
-		{DirectX::XMFLOAT3(-0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(0,   1,   0),},
-		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(0,   1,   1),},
+		{DirectX::XMFLOAT3(-0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(0,   0,   0), DirectX::XMFLOAT2(0,   0),},
+		{DirectX::XMFLOAT3(-0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(0,   0,   1), DirectX::XMFLOAT2(0,   1),},
+		{DirectX::XMFLOAT3(-0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(0,   1,   0), DirectX::XMFLOAT2(1,   0),},
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(0,   1,   1), DirectX::XMFLOAT2(1,   1),},
 
-		{DirectX::XMFLOAT3(0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0),},
-		{DirectX::XMFLOAT3(0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1),},
-		{DirectX::XMFLOAT3(0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0),},
-		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1),},
+		{DirectX::XMFLOAT3(0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0), DirectX::XMFLOAT2(0,   0),},
+		{DirectX::XMFLOAT3(0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1), DirectX::XMFLOAT2(0,   1),},
+		{DirectX::XMFLOAT3(0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0), DirectX::XMFLOAT2(1,   0),},
+		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1), DirectX::XMFLOAT2(1,   1),},
 	};
 
 	// Create vertex buffer:
@@ -459,7 +462,7 @@ void Renderer::Render()
 	);
 
 	// Set up the IA stage by setting the input topology and layout.
-	UINT stride = sizeof(VertexPositionColor);
+	UINT stride = sizeof(VertexPositionColorTexture);
 	UINT offset = 0;
 
 	context->IASetVertexBuffers(
