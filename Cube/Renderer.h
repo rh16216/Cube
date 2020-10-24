@@ -30,6 +30,7 @@ public:
 private:
 	HRESULT CreateShaders();
 	HRESULT CreateCube();
+	HRESULT LoadTexture();
 	void    CreateViewAndPerspective();
 
 	//-----------------------------------------------------------------------------
@@ -76,11 +77,13 @@ private:
 	// Direct3D device resources
 	//-----------------------------------------------------------------------------
 	//ID3DXEffect* m_pEffect;
-	Microsoft::WRL::ComPtr<ID3D11Buffer>            m_pVertexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer>            m_pIndexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11VertexShader>      m_pVertexShader;
-	Microsoft::WRL::ComPtr<ID3D11InputLayout>       m_pInputLayout;
-	Microsoft::WRL::ComPtr<ID3D11InputLayout>       m_pInputLayoutExtended;
-	Microsoft::WRL::ComPtr<ID3D11PixelShader>       m_pPixelShader;
-	Microsoft::WRL::ComPtr<ID3D11Buffer>            m_pConstantBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer>              m_pVertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer>              m_pIndexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11VertexShader>        m_pVertexShader;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout>         m_pInputLayout;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout>         m_pInputLayoutExtended;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader>         m_pPixelShader;
+	Microsoft::WRL::ComPtr<ID3D11Buffer>              m_pConstantBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D>           m_pTexture;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  m_pTextureView;
 };

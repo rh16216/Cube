@@ -274,6 +274,57 @@ HRESULT Renderer::CreateCube()
 	return hr;
 }
 
+HRESULT Renderer::LoadTexture()
+{
+	HRESULT hr = S_OK;
+
+	// Use the Direct3D device to load resources into graphics memory.
+	ID3D11Device* device = m_deviceResources->GetDevice();
+
+	FILE* textureFile;
+	BYTE* bytes;
+
+	size_t destSize = 4096;
+	size_t bytesRead = 0;
+	bytes = new BYTE[destSize];
+
+	fopen_s(&textureFile, "C:/Users/Rudy/source/repos/Cube/Cube/texture.ppm", "rb");
+	bytesRead = fread_s(bytes, destSize, 1, 4096, textureFile);
+	
+	D3D11_SUBRESOURCE_DATA tData;
+	ZeroMemory(&tData, sizeof(D3D11_SUBRESOURCE_DATA));
+	tData.pSysMem = bytes;
+	tData.SysMemPitch = 0;
+	tData.SysMemSlicePitch = 0;
+
+	D3D11_TEXTURE2D_DESC desc;
+	desc.Width = 256;
+	desc.Height = 256;
+	desc.MipLevels = desc.ArraySize = 1;
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.SampleDesc.Count = 1;
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags = 0;
+
+	ID3D11Texture2D *pTexture = NULL;
+	hr = device->CreateTexture2D(&desc, &tData, &m_pTexture);
+
+	CD3D11_SHADER_RESOURCE_VIEW_DESC textureViewDesc(D3D11_SRV_DIMENSION_TEXTURE2D);
+
+	hr = device->CreateShaderResourceView(
+		m_pTexture.Get(),
+		&textureViewDesc,
+		&m_pTextureView
+	);
+
+	delete bytes;
+	fclose(textureFile);
+
+	return hr;
+}
+
 //-----------------------------------------------------------------------------
 // Create the view matrix and create the perspective matrix.
 //-----------------------------------------------------------------------------
@@ -329,6 +380,14 @@ void Renderer::CreateDeviceDependentResources()
 		[this]()
 	{
 		CreateCube();
+	}
+	);
+
+	// Load the texture for the cube.
+	auto LoadTextureTask = CreateShadersTask.then(
+		[this]()
+	{
+		LoadTexture();
 	}
 	);
 }
@@ -436,12 +495,16 @@ void Renderer::Render()
 		m_pConstantBuffer.GetAddressOf()
 	);
 
+	context->VSSetShaderResources(0, 1, &m_pTextureView);
+
 	// Set up the pixel shader stage.
 	context->PSSetShader(
 		m_pPixelShader.Get(),
 		nullptr,
 		0
 	);
+
+	context->PSSetShaderResources(0, 1, &m_pTextureView);
 
 	// Calling Draw tells Direct3D to start sending commands to the graphics device.
 	context->DrawIndexed(
