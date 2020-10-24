@@ -67,7 +67,7 @@ INT WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		// Whoops! We resized the "window" when we went full-screen. Better
 		// tell the renderer.
-		renderer->CreateWindowSizeDependentResources();
+		//renderer->CreateWindowSizeDependentResources();
 
 		// Run the program.
 		hr = winMain->Run(deviceResources, renderer);
