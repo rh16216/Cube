@@ -1,16 +1,17 @@
-//fxc in C:\Program Files (x86)\Windows Kits\10\bin\10.0.17134.0\arm64
+//fxc in C:\Program Files (x86)\Windows Kits\10\bin\10.0.17134.0\x64
 //compile using fxc /T ps_4_0_level_9_0 /Fo CubePixelShader.cso CubePixelShader.hlsl
 
 Texture2D simpleTexture : register(t0);
-//SamplerState simpleSampler : register(s0);
+SamplerState simpleTextureSampler : register(s0);
 
+/*
 SamplerState simpleTextureSampler
 {
 	Filter = MIN_MAG_MIP_LINEAR;
 	AddressU = Wrap;
 	AddressV = Wrap;
 };
-
+*/
 struct PS_INPUT
 {
 	float4 Position  : SV_POSITION;  // interpolated vertex position (system value)

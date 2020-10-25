@@ -1,4 +1,4 @@
-//fxc in C:\Program Files (x86)\Windows Kits\10\bin\10.0.17134.0\arm64
+//fxc in C:\Program Files (x86)\Windows Kits\10\bin\10.0.17134.0\x64
 //compile using fxc /T vs_4_0_level_9_0 /Fo CubeVertexShader.cso CubeVertexShader.hlsl
 
 cbuffer ModelViewProjectionConstantBuffer : register(b0)

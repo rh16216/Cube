@@ -86,4 +86,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer>              m_pConstantBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D>           m_pTexture;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  m_pTextureView;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState>        m_pSampler;
 };

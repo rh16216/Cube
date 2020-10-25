@@ -203,15 +203,41 @@ HRESULT Renderer::CreateCube()
 	// Create cube geometry.
 	VertexPositionColorTexture CubeVertices[] =
 	{
+		//left
 		{DirectX::XMFLOAT3(-0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(0,   0,   0), DirectX::XMFLOAT2(0,   0),},
 		{DirectX::XMFLOAT3(-0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(0,   0,   1), DirectX::XMFLOAT2(0,   1),},
 		{DirectX::XMFLOAT3(-0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(0,   1,   0), DirectX::XMFLOAT2(1,   0),},
 		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(0,   1,   1), DirectX::XMFLOAT2(1,   1),},
 
-		{DirectX::XMFLOAT3(0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0), DirectX::XMFLOAT2(0,   0),},
-		{DirectX::XMFLOAT3(0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1), DirectX::XMFLOAT2(0,   1),},
-		{DirectX::XMFLOAT3(0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0), DirectX::XMFLOAT2(1,   0),},
-		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1), DirectX::XMFLOAT2(1,   1),},
+		//back
+		{DirectX::XMFLOAT3( 0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0), DirectX::XMFLOAT2(0,   1),},
+		{DirectX::XMFLOAT3(-0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(0,   0,   0), DirectX::XMFLOAT2(0,   0),},
+		{DirectX::XMFLOAT3( 0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0), DirectX::XMFLOAT2(1,   1),},
+		{DirectX::XMFLOAT3(-0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(0,   1,   0), DirectX::XMFLOAT2(1,   0),},
+
+		//front
+		{DirectX::XMFLOAT3(-0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(0,   0,   1), DirectX::XMFLOAT2(0,   0),},
+		{DirectX::XMFLOAT3( 0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1), DirectX::XMFLOAT2(0,   1),},
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(0,   1,   1), DirectX::XMFLOAT2(1,   0),},
+		{DirectX::XMFLOAT3( 0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1), DirectX::XMFLOAT2(1,   1),},
+
+		//top
+		{DirectX::XMFLOAT3(-0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(0,   1,   0), DirectX::XMFLOAT2(0,   0),},
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(0,   1,   1), DirectX::XMFLOAT2(0,   1),},
+		{DirectX::XMFLOAT3( 0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0), DirectX::XMFLOAT2(1,   0),},
+		{DirectX::XMFLOAT3( 0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1), DirectX::XMFLOAT2(1,   1),},
+
+		//bottom
+		{DirectX::XMFLOAT3(-0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(0,   0,   0), DirectX::XMFLOAT2(0,   0),},
+		{DirectX::XMFLOAT3(-0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(0,   0,   1), DirectX::XMFLOAT2(0,   1),},
+		{DirectX::XMFLOAT3( 0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0), DirectX::XMFLOAT2(1,   0),},
+		{DirectX::XMFLOAT3( 0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1), DirectX::XMFLOAT2(1,   1),},
+
+		//right
+		{DirectX::XMFLOAT3( 0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1), DirectX::XMFLOAT2(0,   1),},
+		{DirectX::XMFLOAT3( 0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0), DirectX::XMFLOAT2(0,   0),},
+		{DirectX::XMFLOAT3( 0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1), DirectX::XMFLOAT2(1,   1),},
+		{DirectX::XMFLOAT3( 0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0), DirectX::XMFLOAT2(1,   0),},
 	};
 
 	// Create vertex buffer:
@@ -236,23 +262,23 @@ HRESULT Renderer::CreateCube()
 	// Create index buffer:
 	unsigned short CubeIndices[] =
 	{
-		0,2,1, // -x
+		0,2,1, // left
 		1,2,3,
 
-		4,5,6, // +x
-		5,7,6,
+		4,6,5, // back
+		5,6,7,
 
-		0,1,5, // -y
-		0,5,4,
+		8,10,9, // front
+		9,10,11,
 
-		2,6,7, // +y
-		2,7,3,
+		12,14,13, // top
+		13,14,15,
 
-		0,4,6, // -z
-		0,6,2,
+		16,18,17, // bottom
+		17,18,19,
 
-		1,3,7, // +z
-		1,7,5,
+		20,22,21, // right
+		21,22,23,
 	};
 
 	m_indexCount = ARRAYSIZE(CubeIndices);
@@ -321,6 +347,18 @@ HRESULT Renderer::LoadTexture()
 		&textureViewDesc,
 		&m_pTextureView
 	);
+
+	// Create the sample state
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	hr = device->CreateSamplerState(&sampDesc, &m_pSampler);
 
 	delete bytes;
 	fclose(textureFile);
@@ -498,7 +536,7 @@ void Renderer::Render()
 		m_pConstantBuffer.GetAddressOf()
 	);
 
-	context->VSSetShaderResources(0, 1, &m_pTextureView);
+	//context->VSSetShaderResources(0, 1, &m_pTextureView);
 
 	// Set up the pixel shader stage.
 	context->PSSetShader(
@@ -507,7 +545,8 @@ void Renderer::Render()
 		0
 	);
 
-	context->PSSetShaderResources(0, 1, &m_pTextureView);
+	context->PSSetShaderResources(0, 1, m_pTextureView.GetAddressOf());
+	context->PSSetSamplers(0, 1, m_pSampler.GetAddressOf());
 
 	// Calling Draw tells Direct3D to start sending commands to the graphics device.
 	context->DrawIndexed(
