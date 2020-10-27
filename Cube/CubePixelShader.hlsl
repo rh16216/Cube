@@ -4,6 +4,14 @@
 Texture2D simpleTexture : register(t0);
 SamplerState simpleTextureSampler : register(s0);
 
+cbuffer RenderTypeBuffer : register(b0)
+{
+	int colourFlag;
+	int textureFlag;
+	int pixelLightFlag;
+	int OtherFlag;
+};
+
 /*
 SamplerState simpleTextureSampler
 {
@@ -28,7 +36,19 @@ struct PS_OUTPUT
 PS_OUTPUT main(PS_INPUT In)
 {
 	PS_OUTPUT Output;
-	Output.RGBColor = simpleTexture.Sample(simpleTextureSampler, In.TextureUV)*In.Color;
+
+	float4 finalColour = { 1.0f, 1.0f, 1.0f, 1.0f };
+	float4 finalTexture = { 1.0f, 1.0f, 1.0f, 1.0f };
+	
+	if (colourFlag) {
+		finalColour = In.Color;
+	}
+
+	if (textureFlag) {
+		finalTexture = simpleTexture.Sample(simpleTextureSampler, In.TextureUV);
+	}
+
+	Output.RGBColor = finalTexture*finalColour;
 	//Output.RGBColor = In.Color;
 
 	return Output;

@@ -50,6 +50,16 @@ private:
 	// Assert that the constant buffer remains 16-byte aligned.
 	static_assert((sizeof(ConstantBufferStruct) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
 
+	typedef struct _renderTypeStruct {
+		uint32_t colourFlag;
+		uint32_t textureFlag;
+		uint32_t pixelLightFlag;
+		uint32_t OtherFlag;
+	} RenderTypeStruct;
+
+	// Assert that the render type buffer remains 16-byte aligned.
+	static_assert((sizeof(RenderTypeStruct) % 16) == 0, "Render Type Buffer size must be 16-byte aligned");
+
 	//-----------------------------------------------------------------------------
 	// Per-vertex data
 	//-----------------------------------------------------------------------------
@@ -70,6 +80,7 @@ private:
 	} VertexPositionColorTexture;
 
 	ConstantBufferStruct m_constantBufferData;
+	RenderTypeStruct m_renderTypeData;
 	unsigned int  m_indexCount;
 	unsigned int  m_frameCount;
 
@@ -84,6 +95,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>         m_pInputLayoutExtended;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>         m_pPixelShader;
 	Microsoft::WRL::ComPtr<ID3D11Buffer>              m_pConstantBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer>              m_pRenderTypeBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D>           m_pTexture;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  m_pTextureView;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState>        m_pSampler;

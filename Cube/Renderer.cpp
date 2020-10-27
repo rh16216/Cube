@@ -113,6 +113,17 @@ HRESULT Renderer::CreateShaders()
 		m_pConstantBuffer.GetAddressOf()
 	);
 
+	CD3D11_BUFFER_DESC rtbDesc(
+		sizeof(ConstantBufferStruct),
+		D3D11_BIND_CONSTANT_BUFFER
+	);
+
+	hr = device->CreateBuffer(
+		&rtbDesc,
+		nullptr,
+		m_pRenderTypeBuffer.GetAddressOf()
+	);
+
 	fclose(vShader);
 	fclose(pShader);
 
@@ -458,6 +469,21 @@ void Renderer::Update()
 	);
 
 	if (m_frameCount == 360)  m_frameCount = 0;
+
+	if (((m_frameCount / 60) % 2) == 0) {
+		m_renderTypeData.colourFlag = 1;
+		m_renderTypeData.textureFlag = 0;
+		m_renderTypeData.pixelLightFlag = 0;
+		m_renderTypeData.OtherFlag = 0;
+	}
+	else {
+		m_renderTypeData.colourFlag = 0;
+		m_renderTypeData.textureFlag = 1;
+		m_renderTypeData.pixelLightFlag = 0;
+		m_renderTypeData.OtherFlag = 0;
+	}
+
+
 }
 
 //-----------------------------------------------------------------------------
@@ -476,6 +502,15 @@ void Renderer::Render()
 		0,
 		nullptr,
 		&m_constantBufferData,
+		0,
+		0
+	);
+
+	context->UpdateSubresource(
+		m_pRenderTypeBuffer.Get(),
+		0,
+		nullptr,
+		&m_renderTypeData,
 		0,
 		0
 	);
@@ -543,6 +578,12 @@ void Renderer::Render()
 		m_pPixelShader.Get(),
 		nullptr,
 		0
+	);
+
+	context->PSSetConstantBuffers(
+		0,
+		1,
+		m_pRenderTypeBuffer.GetAddressOf()
 	);
 
 	context->PSSetShaderResources(0, 1, m_pTextureView.GetAddressOf());
