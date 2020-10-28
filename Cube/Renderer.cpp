@@ -221,10 +221,10 @@ HRESULT Renderer::CreateCube()
 		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(0,   1,   1), DirectX::XMFLOAT2(1,   1),},
 
 		//back
-		{DirectX::XMFLOAT3( 0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0), DirectX::XMFLOAT2(0,   1),},
-		{DirectX::XMFLOAT3(-0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(0,   0,   0), DirectX::XMFLOAT2(0,   0),},
-		{DirectX::XMFLOAT3( 0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0), DirectX::XMFLOAT2(1,   1),},
-		{DirectX::XMFLOAT3(-0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(0,   1,   0), DirectX::XMFLOAT2(1,   0),},
+		{DirectX::XMFLOAT3( 0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0), DirectX::XMFLOAT2(0,   0),},
+		{DirectX::XMFLOAT3(-0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(0,   0,   0), DirectX::XMFLOAT2(0,   1),},
+		{DirectX::XMFLOAT3( 0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0), DirectX::XMFLOAT2(1,   0),},
+		{DirectX::XMFLOAT3(-0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(0,   1,   0), DirectX::XMFLOAT2(1,   1),},
 
 		//front
 		{DirectX::XMFLOAT3(-0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(0,   0,   1), DirectX::XMFLOAT2(0,   0),},
@@ -245,10 +245,10 @@ HRESULT Renderer::CreateCube()
 		{DirectX::XMFLOAT3( 0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1), DirectX::XMFLOAT2(1,   1),},
 
 		//right
-		{DirectX::XMFLOAT3( 0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1), DirectX::XMFLOAT2(0,   1),},
-		{DirectX::XMFLOAT3( 0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0), DirectX::XMFLOAT2(0,   0),},
-		{DirectX::XMFLOAT3( 0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1), DirectX::XMFLOAT2(1,   1),},
-		{DirectX::XMFLOAT3( 0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0), DirectX::XMFLOAT2(1,   0),},
+		{DirectX::XMFLOAT3( 0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1), DirectX::XMFLOAT2(0,   0),},
+		{DirectX::XMFLOAT3( 0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0), DirectX::XMFLOAT2(0,   1),},
+		{DirectX::XMFLOAT3( 0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1), DirectX::XMFLOAT2(1,   0),},
+		{DirectX::XMFLOAT3( 0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0), DirectX::XMFLOAT2(1,   1),},
 	};
 
 	// Create vertex buffer:
@@ -324,21 +324,21 @@ HRESULT Renderer::LoadTexture()
 	FILE* textureFile;
 	BYTE* bytes;
 
-	size_t destSize = 200000;
+	size_t destSize = 600000;
 	size_t bytesRead = 0;
 	bytes = new BYTE[destSize];
 
 	fopen_s(&textureFile, "C:/Users/Rudy/source/repos/Cube/Cube/texture.ppm", "rb");
-	bytesRead = fread_s(bytes, destSize, 1, 480*395, textureFile);
+	bytesRead = fread_s(bytes, destSize, 1, 480*395*3, textureFile);
 	
 	D3D11_SUBRESOURCE_DATA tData;
 	ZeroMemory(&tData, sizeof(D3D11_SUBRESOURCE_DATA));
 	tData.pSysMem = bytes;
-	tData.SysMemPitch = 480;
+	tData.SysMemPitch = 480*3;
 	tData.SysMemSlicePitch = 0;
 
 	D3D11_TEXTURE2D_DESC desc;
-	desc.Width = 480;
+	desc.Width = 480*3;
 	desc.Height = 395;
 	desc.MipLevels = desc.ArraySize = 1;
 	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
