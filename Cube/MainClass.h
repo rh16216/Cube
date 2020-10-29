@@ -53,6 +53,7 @@ private:
 	HMENU     m_hMenu;
 	RECT      m_rc;
 	HWND      m_hWnd;
+
 };
 
 // These are STATIC because this sample only creates one window.
@@ -60,3 +61,7 @@ private:
 // differently.
 static HINSTANCE m_hInstance;
 static std::wstring m_windowClassName;
+
+//Flags for updates based on user input
+static uint32_t colourFlag;
+static uint32_t textureFlag;

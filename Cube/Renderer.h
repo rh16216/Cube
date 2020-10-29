@@ -24,8 +24,11 @@ public:
 
 	void CreateDeviceDependentResources();
 	void CreateWindowSizeDependentResources();
-	void Update();
+	void Update(uint32_t colourFlag, uint32_t textureFlag);
 	void Render();
+	void SetTexture();
+	void SetColour();
+
 
 private:
 	HRESULT CreateShaders();
@@ -50,7 +53,7 @@ private:
 	// Assert that the constant buffer remains 16-byte aligned.
 	static_assert((sizeof(ConstantBufferStruct) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
 
-	typedef struct _renderTypeStruct {
+	typedef struct _renderTypeStruct { //uint32_t used to ensure 16-byte alignment
 		uint32_t colourFlag;
 		uint32_t textureFlag;
 		uint32_t pixelLightFlag;
@@ -59,6 +62,14 @@ private:
 
 	// Assert that the render type buffer remains 16-byte aligned.
 	static_assert((sizeof(RenderTypeStruct) % 16) == 0, "Render Type Buffer size must be 16-byte aligned");
+
+	void SetTexture(uint32_t input) {
+		m_renderTypeData.textureFlag = input;
+	}
+
+	void SetColour(uint32_t input) {
+		m_renderTypeData.colourFlag = input;
+	}
 
 	//-----------------------------------------------------------------------------
 	// Per-vertex data

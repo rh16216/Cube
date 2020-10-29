@@ -454,7 +454,7 @@ void Renderer::CreateWindowSizeDependentResources()
 //-----------------------------------------------------------------------------
 // Update the scene.
 //-----------------------------------------------------------------------------
-void Renderer::Update()
+void Renderer::Update(uint32_t colourFlag, uint32_t textureFlag)
 {
 	// Rotate the cube 1 degree per frame.
 	DirectX::XMStoreFloat4x4(
@@ -470,19 +470,10 @@ void Renderer::Update()
 
 	if (m_frameCount == 360)  m_frameCount = 0;
 
-	if (((m_frameCount / 60) % 2) == 0) {
-		m_renderTypeData.colourFlag = 1;
-		m_renderTypeData.textureFlag = 0;
-		m_renderTypeData.pixelLightFlag = 0;
-		m_renderTypeData.OtherFlag = 0;
-	}
-	else {
-		m_renderTypeData.colourFlag = 0;
-		m_renderTypeData.textureFlag = 1;
-		m_renderTypeData.pixelLightFlag = 0;
-		m_renderTypeData.OtherFlag = 0;
-	}
-
+	SetTexture(textureFlag);
+	SetColour(colourFlag);
+	m_renderTypeData.pixelLightFlag = 0;
+	m_renderTypeData.OtherFlag = 0;
 
 }
 

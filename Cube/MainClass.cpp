@@ -35,6 +35,8 @@ MainClass::MainClass()
 {
 	m_windowClassName = L"Direct3DWindowClass";
 	m_hInstance = NULL;
+	colourFlag = 0;
+	textureFlag = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -145,7 +147,7 @@ HRESULT MainClass::Run(
 		else
 		{
 			// Update the scene.
-			renderer->Update();
+			renderer->Update(colourFlag, textureFlag);
 
 			// Render frames during idle time (when no messages are waiting).
 			renderer->Render();
@@ -180,6 +182,25 @@ LRESULT CALLBACK MainClass::StaticWindowProc(
 {
 	switch (uMsg)
 	{
+
+	case WM_CHAR:
+	{
+		/*
+		wchar_t msg[32];
+		swprintf_s(msg, L"WM_CHAR: %X\n", (wchar_t)wParam);
+		OutputDebugString(msg);
+		*/
+		// Numbers are 32 bit higher (20 in hex) than docs?
+		if (wParam == 0x74) { // T key toggles texture
+			textureFlag = 1 - textureFlag;
+		}
+		else if (wParam == 0x63) { // C key toggles colour
+			colourFlag  = 1 - colourFlag;
+		}
+
+		return 0;
+	}
+
 	case WM_CLOSE:
 	{
 		HMENU hMenu;
