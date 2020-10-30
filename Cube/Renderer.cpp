@@ -323,28 +323,39 @@ HRESULT Renderer::LoadTexture()
 
 	FILE* textureFile;
 	BYTE* bytes;
+	BYTE* bytesBGRA;
 
-	size_t destSize = 600000;
+	size_t destSize = 480*395*4;
 	size_t bytesRead = 0;
 	bytes = new BYTE[destSize];
+	bytesBGRA = new BYTE[destSize];
 
-	fopen_s(&textureFile, "C:/Users/Rudy/source/repos/Cube/Cube/texture.ppm", "rb");
-	bytesRead = fread_s(bytes, destSize, 1, 480*395*3, textureFile);
+	fopen_s(&textureFile, "C:/Users/Rudy/source/repos/Cube/Cube/texture.bmp", "rb");
+	bytesRead = fread_s(bytes, destSize, 1, 480*395*4, textureFile);
 	
+	for (int i = 0; i < destSize / 4; i++) { 
+		//double the conversion required?
+		bytesBGRA[4*i] = bytes[4*i + 2];
+		bytesBGRA[4*i + 1] = bytes[4*i + 3];
+		bytesBGRA[4*i + 2] = bytes[4*i];
+		bytesBGRA[4*i + 3] = bytes[4*i + 1];
+
+	}
+
 	D3D11_SUBRESOURCE_DATA tData;
 	ZeroMemory(&tData, sizeof(D3D11_SUBRESOURCE_DATA));
-	tData.pSysMem = bytes;
-	tData.SysMemPitch = 480*3;
+	tData.pSysMem = bytesBGRA;
+	tData.SysMemPitch = 480*4;
 	tData.SysMemSlicePitch = 0;
 
 	D3D11_TEXTURE2D_DESC desc;
-	desc.Width = 480*3;
+	desc.Width = 480;
 	desc.Height = 395;
 	desc.MipLevels = desc.ArraySize = 1;
-	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
-	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	desc.MiscFlags = 0;
@@ -372,6 +383,7 @@ HRESULT Renderer::LoadTexture()
 	hr = device->CreateSamplerState(&sampDesc, &m_pSampler);
 
 	delete bytes;
+	delete bytesBGRA;
 	fclose(textureFile);
 
 	return hr;
