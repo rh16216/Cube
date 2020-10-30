@@ -326,20 +326,28 @@ HRESULT Renderer::LoadTexture()
 	BYTE* bytesBGRA;
 
 	size_t destSize = 480*395*4;
+	size_t headerSize = 121;
 	size_t bytesRead = 0;
-	bytes = new BYTE[destSize];
+	bytes = new BYTE[headerSize+destSize];
 	bytesBGRA = new BYTE[destSize];
 
 	fopen_s(&textureFile, "C:/Users/Rudy/source/repos/Cube/Cube/texture.bmp", "rb");
-	bytesRead = fread_s(bytes, destSize, 1, 480*395*4, textureFile);
+	bytesRead = fread_s(bytes, destSize+headerSize, 1, 480*395*4+121, textureFile);
 	
-	for (int i = 0; i < destSize / 4; i++) { 
-		//double the conversion required?
-		bytesBGRA[4*i] = bytes[4*i + 2];
-		bytesBGRA[4*i + 1] = bytes[4*i + 3];
-		bytesBGRA[4*i + 2] = bytes[4*i];
-		bytesBGRA[4*i + 3] = bytes[4*i + 1];
+	//Process header
+	for (int i = 0; i < destSize; i++) {
+		bytesBGRA[i] = bytes[i + headerSize];
+	}
 
+	//Convert from ARGB to BGRA
+	for (int j = 0; j < destSize / 4; j++) { 
+		BYTE alpha = bytesBGRA[4*j];
+
+		bytesBGRA[4*j]     = bytesBGRA[4*j + 1];
+		bytesBGRA[4*j + 1] = bytesBGRA[4*j + 2];
+		bytesBGRA[4*j + 2] = bytesBGRA[4*j + 3];
+		bytesBGRA[4*j + 3] = alpha;
+	
 	}
 
 	D3D11_SUBRESOURCE_DATA tData;
