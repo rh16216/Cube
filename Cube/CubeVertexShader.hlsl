@@ -17,9 +17,10 @@ struct VS_INPUT
 
 struct VS_OUTPUT
 {
-	float4 Position  : SV_POSITION;  // interpolated vertex position (system value)
-	float4 Color     : COLOR0;       // interpolated diffuse color
-	float2 TextureUV : TEXCOORD0;    // UV texture coordinates
+	float4 Position   : SV_POSITION;  // interpolated vertex position (system value)
+	float4 Position3d : POSITION;  // interpolated vertex position (accessible by Pixel Shader)
+	float4 Color      : COLOR0;       // interpolated diffuse color
+	float2 TextureUV  : TEXCOORD0;    // UV texture coordinates
 };
 
 VS_OUTPUT main(VS_INPUT input) // main is the default function name
@@ -32,6 +33,7 @@ VS_OUTPUT main(VS_INPUT input) // main is the default function name
 	pos = mul(pos, View);
 	pos = mul(pos, Projection);
 	Output.Position = pos;
+	Output.Position3d = pos;
 
 	// Just pass through the color and texture data
 	Output.Color = float4(input.vColor, 1.0f);

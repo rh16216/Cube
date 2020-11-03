@@ -124,78 +124,19 @@ HRESULT Renderer::CreateShaders()
 		m_pRenderTypeBuffer.GetAddressOf()
 	);
 
-	fclose(vShader);
-	fclose(pShader);
-
-
-	// Load the extended shaders with lighting calculations.
-	/*
-	bytes = new BYTE[destSize];
-	bytesRead = 0;
-	fopen_s(&vShader, "CubeVertexShaderLighting.cso", "rb");
-	bytesRead = fread_s(bytes, destSize, 1, 4096, vShader);
-	hr = device->CreateVertexShader(
-		bytes,
-		bytesRead,
-		nullptr,
-		&m_pVertexShader
-		);
-
-	D3D11_INPUT_ELEMENT_DESC iaDescExtended[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-		0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-		0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-
-		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-		0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-
-	hr = device->CreateInputLayout(
-		iaDesc,
-		ARRAYSIZE(iaDesc),
-		bytes,
-		bytesRead,
-		&m_pInputLayoutExtended
-		);
-
-	delete bytes;
-
-
-	bytes = new BYTE[destSize];
-	bytesRead = 0;
-	fopen_s(&pShader, "CubePixelShaderPhongLighting.cso", "rb");
-	bytesRead = fread_s(bytes, destSize, 1, 4096, pShader);
-	hr = device->CreatePixelShader(
-		bytes,
-		bytesRead,
-		nullptr,
-		m_pPixelShader.GetAddressOf()
-		);
-
-	delete bytes;
-
-	fclose(vShader);
-	fclose(pShader);
-
-
-	bytes = new BYTE[destSize];
-	bytesRead = 0;
-	fopen_s(&pShader, "CubePixelShaderTexelLighting.cso", "rb");
-	bytesRead = fread_s(bytes, destSize, 1, 4096, pShader);
-	hr = device->CreatePixelShader(
-	bytes,
-	bytesRead,
-	nullptr,
-	m_pPixelShader.GetAddressOf()
+	CD3D11_BUFFER_DESC lbDesc(
+		sizeof(LightBufferStruct),
+		D3D11_BIND_CONSTANT_BUFFER
 	);
 
-	delete bytes;
+	hr = device->CreateBuffer(
+		&lbDesc,
+		nullptr,
+		m_pLightBuffer.GetAddressOf()
+	);
 
+	fclose(vShader);
 	fclose(pShader);
-	*/
 
 	return hr;
 }
@@ -434,6 +375,18 @@ void Renderer::CreateViewAndPerspective()
 	);
 }
 
+void Renderer::CreateLightInfo()
+{
+	// Use DirectXMath to create view and perspective matrices.
+
+	DirectX::XMVECTOR position = DirectX::XMVectorSet(2.0f, 2.0f, 2.0f, 1.0f);
+	DirectX::XMVECTOR intensity = DirectX::XMVectorSet(100.0f, 100.0f, 100.0f, 100.0f);
+
+	DirectX::XMStoreFloat4(&m_lightBufferData.position, position);
+	DirectX::XMStoreFloat4(&m_lightBufferData.intensity, intensity);
+	
+}
+
 //-----------------------------------------------------------------------------
 // Create device-dependent resources for rendering.
 //-----------------------------------------------------------------------------
@@ -468,6 +421,7 @@ void Renderer::CreateWindowSizeDependentResources()
 {
 	// Create the view matrix and the perspective matrix.
 	CreateViewAndPerspective();
+	CreateLightInfo();
 }
 
 
@@ -522,6 +476,15 @@ void Renderer::Render()
 		0,
 		nullptr,
 		&m_renderTypeData,
+		0,
+		0
+	);
+
+	context->UpdateSubresource(
+		m_pLightBuffer.Get(),
+		0,
+		nullptr,
+		&m_lightBufferData,
 		0,
 		0
 	);
@@ -595,6 +558,12 @@ void Renderer::Render()
 		0,
 		1,
 		m_pRenderTypeBuffer.GetAddressOf()
+	);
+
+	context->PSSetConstantBuffers(
+		1,
+		1,
+		m_pLightBuffer.GetAddressOf()
 	);
 
 	context->PSSetShaderResources(0, 1, m_pTextureView.GetAddressOf());

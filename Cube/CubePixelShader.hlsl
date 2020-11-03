@@ -9,7 +9,13 @@ cbuffer RenderTypeBuffer : register(b0)
 	int colourFlag;
 	int textureFlag;
 	int pixelLightFlag;
-	int OtherFlag;
+	int vertexLightFlag;
+};
+
+cbuffer LightBuffer : register(b1)
+{
+	float4 lightPosition;
+	float4 lightIntensity;
 };
 
 /*
@@ -22,9 +28,10 @@ SamplerState simpleTextureSampler
 */
 struct PS_INPUT
 {
-	float4 Position  : SV_POSITION;  // interpolated vertex position (system value)
-	float4 Color     : COLOR0;       // interpolated diffuse color
-	float2 TextureUV : TEXCOORD0;    // UV texture coordinates
+	float4 Position   : SV_POSITION;  // interpolated pixel position (system value)
+	float4 Position3d : POSITION;     // interpolated vertex position (accessible by Pixel Shader)
+	float4 Color      : COLOR0;       // interpolated diffuse color
+	float2 TextureUV  : TEXCOORD0;    // UV texture coordinates
 };
 
 
@@ -39,16 +46,24 @@ PS_OUTPUT main(PS_INPUT In)
 
 	float4 finalColour = { 1.0f, 1.0f, 1.0f, 1.0f };
 	float4 finalTexture = { 1.0f, 1.0f, 1.0f, 1.0f };
+	float4 finalLight = { 1.0f, 1.0f, 1.0f, 1.0f };
 	
 	if (colourFlag) {
 		finalColour = In.Color;
+	}
+	else if (pixelLightFlag) {
+		float lightDistanceSquared = dot((lightPosition - In.Position3d),(lightPosition - In.Position3d));
+		finalLight = lightIntensity/(4*3.14*lightDistanceSquared);
+	}
+	else if (vertexLightFlag) {
+		finalColour = float4(0.0f, 1.0f, 0.0f, 1.0f);
 	}
 
 	if (textureFlag) {
 		finalTexture = simpleTexture.Sample(simpleTextureSampler, In.TextureUV);
 	}
 
-	Output.RGBColor = finalTexture*finalColour;
+	Output.RGBColor = finalTexture*finalColour*finalLight;
 	//Output.RGBColor = In.Color;
 
 	return Output;

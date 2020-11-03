@@ -35,6 +35,7 @@ private:
 	HRESULT CreateCube();
 	HRESULT LoadTexture();
 	void    CreateViewAndPerspective();
+	void    CreateLightInfo();
 
 	//-----------------------------------------------------------------------------
 	// Pointer to device resource manager
@@ -79,6 +80,14 @@ private:
 		m_renderTypeData.vertexLightFlag = input;
 	}
 
+	typedef struct _lightBufferStruct {
+		DirectX::XMFLOAT4 position;
+		DirectX::XMFLOAT4 intensity;
+	} LightBufferStruct;
+
+	// Assert that the constant buffer remains 16-byte aligned.
+	static_assert((sizeof(LightBufferStruct) % 16) == 0, "Light Buffer size must be 16-byte aligned");
+
 	//-----------------------------------------------------------------------------
 	// Per-vertex data
 	//-----------------------------------------------------------------------------
@@ -100,6 +109,7 @@ private:
 
 	ConstantBufferStruct m_constantBufferData;
 	RenderTypeStruct m_renderTypeData;
+	LightBufferStruct m_lightBufferData;
 	unsigned int  m_indexCount;
 	unsigned int  m_frameCount;
 
@@ -115,6 +125,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>         m_pPixelShader;
 	Microsoft::WRL::ComPtr<ID3D11Buffer>              m_pConstantBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer>              m_pRenderTypeBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer>              m_pLightBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D>           m_pTexture;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>  m_pTextureView;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState>        m_pSampler;
