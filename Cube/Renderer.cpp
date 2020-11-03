@@ -545,6 +545,18 @@ void Renderer::Render()
 		m_pConstantBuffer.GetAddressOf()
 	);
 
+	context->VSSetConstantBuffers(
+		1,
+		1,
+		m_pRenderTypeBuffer.GetAddressOf()
+	);
+
+	context->VSSetConstantBuffers(
+		2,
+		1,
+		m_pLightBuffer.GetAddressOf()
+	);
+
 	//context->VSSetShaderResources(0, 1, &m_pTextureView);
 
 	// Set up the pixel shader stage.

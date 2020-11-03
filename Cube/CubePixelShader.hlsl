@@ -31,6 +31,7 @@ struct PS_INPUT
 	float4 Position   : SV_POSITION;  // interpolated pixel position (system value)
 	float4 Position3d : POSITION;     // interpolated vertex position (accessible by Pixel Shader)
 	float4 Color      : COLOR0;       // interpolated diffuse color
+	float4 Light      : COLOR1;       // interpolated vertex lighting
 	float2 TextureUV  : TEXCOORD0;    // UV texture coordinates
 };
 
@@ -51,17 +52,20 @@ PS_OUTPUT main(PS_INPUT In)
 	if (colourFlag) {
 		finalColour = In.Color;
 	}
-	else if (pixelLightFlag) {
-		float lightDistanceSquared = dot((lightPosition - In.Position3d),(lightPosition - In.Position3d));
-		finalLight = lightIntensity/(4*3.14*lightDistanceSquared);
-	}
-	else if (vertexLightFlag) {
-		finalColour = float4(0.0f, 1.0f, 0.0f, 1.0f);
-	}
 
 	if (textureFlag) {
 		finalTexture = simpleTexture.Sample(simpleTextureSampler, In.TextureUV);
 	}
+
+	if (pixelLightFlag) {
+		float lightDistanceSquared = dot((lightPosition - In.Position3d),(lightPosition - In.Position3d));
+		finalLight = lightIntensity/(4*3.14*lightDistanceSquared);
+	}
+	
+	if (vertexLightFlag) {
+		finalLight = In.Light;
+	}
+
 
 	Output.RGBColor = finalTexture*finalColour*finalLight;
 	//Output.RGBColor = In.Color;

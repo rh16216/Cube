@@ -8,6 +8,20 @@ cbuffer ModelViewProjectionConstantBuffer : register(b0)
 	matrix Projection;  // projection matrix
 };
 
+cbuffer RenderTypeBuffer : register(b1)
+{
+	int colourFlag;
+	int textureFlag;
+	int pixelLightFlag;
+	int vertexLightFlag;
+};
+
+cbuffer LightBuffer : register(b2)
+{
+	float4 lightPosition;
+	float4 lightIntensity;
+};
+
 struct VS_INPUT
 {
 	float3 vPos       : POSITION;
@@ -20,6 +34,7 @@ struct VS_OUTPUT
 	float4 Position   : SV_POSITION;  // interpolated vertex position (system value)
 	float4 Position3d : POSITION;  // interpolated vertex position (accessible by Pixel Shader)
 	float4 Color      : COLOR0;       // interpolated diffuse color
+	float4 Light      : COLOR1;       // interpolated vertex lighting
 	float2 TextureUV  : TEXCOORD0;    // UV texture coordinates
 };
 
@@ -38,6 +53,14 @@ VS_OUTPUT main(VS_INPUT input) // main is the default function name
 	// Just pass through the color and texture data
 	Output.Color = float4(input.vColor, 1.0f);
 	Output.TextureUV = input.vTextureUV;
+
+	if (vertexLightFlag) {
+		float lightDistanceSquared = dot((lightPosition - pos), (lightPosition - pos));
+		Output.Light = lightIntensity / (4 * 3.14*lightDistanceSquared);
+	}
+	else {
+		Output.Light = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
 
 	return Output;
 }
