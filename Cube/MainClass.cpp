@@ -36,7 +36,7 @@ MainClass::MainClass()
 	m_windowClassName = L"Direct3DWindowClass";
 	m_hInstance = NULL;
 	colourFlag = 0;
-	textureFlag = 0;
+	textureFlag = 1;
 }
 
 //-----------------------------------------------------------------------------
