@@ -24,7 +24,7 @@ public:
 
 	void CreateDeviceDependentResources();
 	void CreateWindowSizeDependentResources();
-	void Update(uint32_t colourFlag, uint32_t textureFlag);
+	void Update(uint32_t colourFlag, uint32_t textureFlag, uint32_t pixelLightFlag, uint32_t vertexLightFlag);
 	void Render();
 	void SetTexture();
 	void SetColour();
@@ -57,7 +57,7 @@ private:
 		uint32_t colourFlag;
 		uint32_t textureFlag;
 		uint32_t pixelLightFlag;
-		uint32_t OtherFlag;
+		uint32_t vertexLightFlag;
 	} RenderTypeStruct;
 
 	// Assert that the render type buffer remains 16-byte aligned.
@@ -69,6 +69,14 @@ private:
 
 	void SetColour(uint32_t input) {
 		m_renderTypeData.colourFlag = input;
+	}
+
+	void SetPixelLight(uint32_t input) {
+		m_renderTypeData.pixelLightFlag = input;
+	}
+
+	void SetVertexLight(uint32_t input) {
+		m_renderTypeData.vertexLightFlag = input;
 	}
 
 	//-----------------------------------------------------------------------------

@@ -65,3 +65,5 @@ static std::wstring m_windowClassName;
 //Flags for updates based on user input
 static uint32_t colourFlag;
 static uint32_t textureFlag;
+static uint32_t pixelLightFlag;
+static uint32_t vertexLightFlag;

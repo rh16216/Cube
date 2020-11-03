@@ -114,7 +114,7 @@ HRESULT Renderer::CreateShaders()
 	);
 
 	CD3D11_BUFFER_DESC rtbDesc(
-		sizeof(ConstantBufferStruct),
+		sizeof(RenderTypeStruct),
 		D3D11_BIND_CONSTANT_BUFFER
 	);
 
@@ -474,7 +474,7 @@ void Renderer::CreateWindowSizeDependentResources()
 //-----------------------------------------------------------------------------
 // Update the scene.
 //-----------------------------------------------------------------------------
-void Renderer::Update(uint32_t colourFlag, uint32_t textureFlag)
+void Renderer::Update(uint32_t colourFlag, uint32_t textureFlag, uint32_t pixelLightFlag, uint32_t vertexLightFlag)
 {
 	// Rotate the cube 1 degree per frame.
 	DirectX::XMStoreFloat4x4(
@@ -492,8 +492,8 @@ void Renderer::Update(uint32_t colourFlag, uint32_t textureFlag)
 
 	SetTexture(textureFlag);
 	SetColour(colourFlag);
-	m_renderTypeData.pixelLightFlag = 0;
-	m_renderTypeData.OtherFlag = 0;
+	SetPixelLight(pixelLightFlag);
+	SetVertexLight(vertexLightFlag);
 
 }
 

@@ -37,6 +37,8 @@ MainClass::MainClass()
 	m_hInstance = NULL;
 	colourFlag = 0;
 	textureFlag = 1;
+	pixelLightFlag = 0;
+	vertexLightFlag = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -147,7 +149,7 @@ HRESULT MainClass::Run(
 		else
 		{
 			// Update the scene.
-			renderer->Update(colourFlag, textureFlag);
+			renderer->Update(colourFlag, textureFlag, pixelLightFlag, vertexLightFlag);
 
 			// Render frames during idle time (when no messages are waiting).
 			renderer->Render();
@@ -196,6 +198,14 @@ LRESULT CALLBACK MainClass::StaticWindowProc(
 		}
 		else if (wParam == 0x63) { // C key toggles colour
 			colourFlag  = 1 - colourFlag;
+		}
+		else if (wParam == 0x70) { // P key toggles pixel lighting and turns off vertex lighting
+			pixelLightFlag = 1 - pixelLightFlag;
+			vertexLightFlag = 0;
+		}
+		else if (wParam == 0x76) { // V key toggles vertex lighting and turns off pixel lighting
+			vertexLightFlag = 1 - vertexLightFlag;
+			pixelLightFlag = 0;
 		}
 
 		return 0;
