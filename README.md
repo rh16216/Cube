@@ -5,3 +5,6 @@ Completed and fixed codebase for Microsoft DirectX Cube example project describe
 
 ## CubeTexture Branch:
 Added brick texture to cube example project. Press `t` to toggle the brick texure, and `c` to toggle the interpolated colour from the example project.
+
+## CubeLighting Branch:
+Added lighting to textured cube project. Press `v` to toggle vertex lighting, and `p` to toggle pixel lighting.
